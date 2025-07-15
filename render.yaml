@@ -1,0 +1,19 @@
+# render.yaml
+services:
+  - type: web
+    name: reddit-detector # 您的應用服務名稱
+    env: python
+    buildCommand: "./build.sh" # 執行 build.sh 腳本
+    startCommand: "gunicorn reddit_project.wsgi:application" # 啟動 Django 應用
+    envVars:
+      - key: DATABASE_URL # 從資料庫服務自動注入
+        fromDatabase:
+          name: reddit-db # 指向下面的資料庫服務名稱
+      - key: SECRET_KEY # 必須設置，生成一個複雜的隨機字符串
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: 3.12.3 # 請確認您的 Python 版本
+
+  - type: postgres
+    name: reddit-db # 您的資料庫服務名稱
+    plan: free # 開發測試可以用 free 方案
