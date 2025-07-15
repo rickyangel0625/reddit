@@ -14,6 +14,7 @@ from pathlib import Path
 from decouple import config
 import os 
 import nltk 
+import dj_database_url
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,13 +26,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = 'django-insecure-y$!@p%26@nf^2x!zi*unmf@da#5qcwfvt%+uxx=09eb+sm*o1d'
-SECRET_KEY = config('SECRET_KEY')
+# SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'your-insecure-default-key-for-local-development') # 僅用於本地開發，Render會提供
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool) # <-- 從 .env 讀取，並設定預設值和類型轉換
+# DEBUG = config('DEBUG', default=False, cast=bool) # <-- 從 .env 讀取，並設定預設值和類型轉換
+DEBUG = False
 
-
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=lambda v: [s.strip() for s in v.split(',')]) # <-- 從 .env 讀取並轉換為列表
+# ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=lambda v: [s.strip() for s in v.split(',')]) # <-- 從 .env 讀取並轉換為列表
+ALLOWED_HOSTS = ['.render.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -86,15 +89,25 @@ WSGI_APPLICATION = 'reddit.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config('DB_NAME'),
+#         'USER': config('DB_USER'),
+#         'PASSWORD': config('DB_PASSWORD'),
+#         'HOST': config('DB_HOST'),
+#         'PORT': config('DB_PORT'),
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT'),
-    }
+    'default': dj_database_url.config(
+        # 如果環境變量中存在 DATABASE_URL (如在 Render 上)，就使用它。
+        # 否則 (如在本地開發時)，就使用本地的 SQLite 資料庫作為預設。
+        default=os.environ.get('DATABASE_URL', 'sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')),
+        conn_max_age=600 # 可選：設置連接的最大生命週期
+    )
 }
 
 # Password validation

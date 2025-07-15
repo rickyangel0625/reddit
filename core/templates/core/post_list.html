@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reddit 貼文列表</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .post {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .post-info {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .post-content {
+            margin-top: 10px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #555;
+        }
+
+        .post-link {
+            color: #007bff;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .post-link:hover {
+            text-decoration: underline;
+        }
+
+        .no-posts {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Reddit 詐騙相關貼文列表</h1>
+
+    {% if posts %}
+    {% for post in posts %}
+    <div class="post">
+        <h2 class="post-title">{{ post.title }}</h2>
+        <div class="post-info">
+            <strong>子版塊:</strong> {{ post.subreddit }} |
+            <strong>分數:</strong> {{ post.score }} |
+            <strong>評論數:</strong> {{ post.comments }} |
+            <strong>發文時間:</strong> {{ post.post_time|date:"Y-m-d H:i" }}
+        </div>
+        {% if post.post_content %}
+        <p class="post-content"><strong>內容:</strong> {{ post.post_content }}</p>
+        {% endif %}
+        <p><a href="{{ post.url }}" target="_blank" class="post-link">原始貼文連結</a></p>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="no-posts">目前沒有 Reddit 貼文。</p>
+    {% endif %}
+</body>
+
+</html>
