@@ -1,10 +1,10 @@
 # render.yaml
 services:
   - type: web
-    name: reddit-detector # 您的應用服務名稱
+    name: reddit # 您的應用服務名稱
     env: python
     buildCommand: "./build.sh" # 執行 build.sh 腳本
-    startCommand: "gunicorn reddit_project.wsgi:application" # 啟動 Django 應用
+    startCommand: "gunicorn reddit.wsgi:application" # 啟動 Django 應用
     envVars:
       - key: DATABASE_URL # 從資料庫服務自動注入
         fromDatabase:
