@@ -31,7 +31,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'your-insecure-default-key-for-local-d
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = config('DEBUG', default=False, cast=bool) # <-- 從 .env 讀取，並設定預設值和類型轉換
-DEBUG = False
+# DEBUG = False
+DEBUG = os.environ.get('DEBUG_VALUE', 'False').lower() == 'true'
 
 # ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=lambda v: [s.strip() for s in v.split(',')]) # <-- 從 .env 讀取並轉換為列表
 # ALLOWED_HOSTS = ['.render.com', 'localhost', '127.0.0.1']
@@ -65,10 +66,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core'
+    'whitenoise.runserver_nostatic'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -165,11 +168,15 @@ USE_TZ = True
 STATIC_URL = '/static/'  # 建議加上前導斜線
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # 專案根目錄的 static 資料夾
-]
-# Whitenoise 設定（可選壓縮與快取） 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),  # 專案根目錄的 static 資料夾
+# ]
+# WhiteNoise 配置
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 
 # Default primary key field type
