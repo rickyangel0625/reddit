@@ -1,7 +1,7 @@
-# build.sh
 #!/usr/bin/env bash
+
 # Exit on first error
-set -e
+set -euo pipefail # 修正為 -euo pipefail，更嚴謹的錯誤處理
 
 # Install Python dependencies
 pip install -r requirements.txt
@@ -9,5 +9,5 @@ pip install -r requirements.txt
 # Run Django migrations
 python manage.py migrate
 
-# Collect static files (if you had any, though for this simple page可能不需要太多)
+# Collect static files
 python manage.py collectstatic --noinput
