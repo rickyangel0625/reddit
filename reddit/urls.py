@@ -17,8 +17,14 @@ Including another URLconf
 # reddit/urls.py 
 from django.contrib import admin
 from django.urls import path, include # 導入 include
+from django.conf import settings # 引入 settings
+from django.conf.urls.static import static # 引入 static 函數
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')), # 將根路徑 ('') 導向 core 應用程式的 urls.py
 ]
+
+# 在開發環境下服務靜態檔案 (Render 會自動處理)
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -35,23 +35,24 @@ DEBUG = False
 
 # ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=lambda v: [s.strip() for s in v.split(',')]) # <-- 從 .env 讀取並轉換為列表
 # ALLOWED_HOSTS = ['.render.com', 'localhost', '127.0.0.1']
+
 ALLOWED_HOSTS = []
 # 在這裡新增 Render 的 URL。最佳實踐是從環境變數讀取。
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
-
-# 確保本地開發時也能正常運行
-# 如果您在 DEBUG=True 時允許所有主機，可以這樣：
-# if DEBUG:
-#    ALLOWED_HOSTS = ['*'] # 本地開發允許所有主機
-# else:
-#    # 在生產環境中，只允許 Render 的主機
-#    ALLOWED_HOSTS = [RENDER_EXTERNAL_HOSTNAME] if RENDER_EXTERNAL_HOSTNAME else []
-
-
-# 您也可以直接將 Render 的 URL 硬寫在這裡 (不推薦，但如果您急於測試可用)
-# ALLOWED_HOSTS = ['reddit-cwzn.onrender.com'] # 替換為您的實際 URL
+DEBUG = True
+# 這段程式碼在 Render 上運行時會自動填入 Render 的主機名稱
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+else:
+    # 如果不是在 Render 上運行 (即本地開發環境)
+    # 我們需要手動添加本地主機名，以便在 DEBUG = False 時也能運行
+    # 如果 DEBUG = True，ALLOWED_HOSTS 檢查會被跳過，好習慣還是加上
+    ALLOWED_HOSTS.append('localhost')
+    ALLOWED_HOSTS.append('127.0.0.1')
+    ALLOWED_HOSTS.append('[::1]') # IPv6 loopback address
 
 
 # Application definition
