@@ -5,6 +5,7 @@ services:
     env: python
     buildCommand: "./build.sh" # 執行 build.sh 腳本
     startCommand: "gunicorn reddit.wsgi:application" # 啟動 Django 應用
+    staticPublishPath: staticfiles
     envVars:
       - key: DATABASE_URL # 從資料庫服務自動注入
         fromDatabase:
