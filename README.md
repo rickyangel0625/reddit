@@ -15,11 +15,11 @@
 ## 技術棧 (Tech Stack)
 
 * **後端:** Python, Django, Gunicorn, WhiteNoise
-* **資料庫:** PostgreSQL (伺服器環境) / SQLite (本地開發)
+* **資料庫:** PostgreSQL/SQLite 
 * **資料分析/處理:** NLTK, Gensim, WordCloud, Matplotlib
 * **部署:** Render
 * **版本控制:** Git
-* **前端:** HTML, CSS (透過外部 `styles.css` 加載)
+* **前端:** HTML, CSS
 
 ## 未來改進 (Future Improvements)
 * 增加用戶互動功能，允許用戶根據子版塊 (subreddits) 進行貼文篩選，以提供更精準的數據檢視。
