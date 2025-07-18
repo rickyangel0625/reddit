@@ -168,9 +168,9 @@ USE_TZ = True
 STATIC_URL = '/static/'  # 建議加上前導斜線
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),  # 專案根目錄的 static 資料夾
-# ]
+STATICFILES_DIRS = [ 
+    os.path.join(BASE_DIR, 'static'),
+]
 # WhiteNoise 配置
 STORAGES = {
     "staticfiles": {

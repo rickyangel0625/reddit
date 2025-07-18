@@ -1,0 +1,28 @@
+/* core/static/core/css/styles.css */
+
+.button-link {
+    display: inline-block; /* 讓 <a> 標籤像塊級元素一樣，但保持在一行 */
+    padding: 12px 25px; /* 內邊距 */
+    background-color: #007bff; /* 按鈕背景色 (藍色) */
+    color: white; /* 文字顏色 */
+    text-align: center; /* 文字居中 */
+    text-decoration: none; /* 移除下劃線 */
+    border-radius: 8px; /* 圓角 */
+    border: none; /* 移除邊框 */
+    cursor: pointer; /* 鼠標懸停時顯示為指針 */
+    font-size: 17px; /* 字體大小 */
+    font-weight: bold; /* 字體加粗 */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* 平滑過渡效果 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 輕微陰影 */
+}
+
+.button-link:hover {
+    background-color: #0056b3; /* 鼠標懸停時的背景色 (深藍色) */
+    transform: translateY(-2px); /* 輕微上移效果 */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* 陰影加深 */
+}
+
+.button-link:active {
+    transform: translateY(0); /* 點擊時恢復位置 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 點擊時陰影變小 */
+}

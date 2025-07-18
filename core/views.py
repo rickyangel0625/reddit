@@ -44,3 +44,8 @@ def post_list_view(request):
     # 渲染到修改後的 post_list.html
     return render(request, 'core/post_list.html', context)
     
+
+
+def lda_visualization_view(request):
+    context = {} 
+    return render(request, 'core/lda_visualization.html', context)

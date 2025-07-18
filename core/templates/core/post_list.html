@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reddit 貼文列表與洞察</title>
+    <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -40,7 +41,7 @@
             border-radius: 8px;
         }
 
-        .nav-section .analysis-link {
+        /* .nav-section .analysis-link {
             padding: 10px 20px;
             background-color: #007bff;
             color: white;
@@ -52,7 +53,7 @@
 
         .nav-section .analysis-link:hover {
             background-color: #0056b3;
-        }
+        } */
 
         /* 貼文列表樣式 */
         .post {
@@ -122,15 +123,13 @@
         <h1>Reddit 詐騙熱門貼文列表與洞察</h1>
 
         <div class="nav-section">
-            <a href="{% static 'core/lda_visualization.html' %}" target="_blank" class="analysis-link">
-                前往 LDA 主題可視化頁面
-            </a>
+            <a href="{% url 'lda_result' %}" class="button-link">查看 LDA 可視化</a>
         </div>
 
         <div class="wordcloud-section">
             <h2>詞雲分析</h2>
             {% if wordcloud_b64 %}
-            <img src="{{ wordcloud_b64 }}" alt="詞雲圖">
+            <img src="{% static 'core/images/wordcloud.png' %}" alt="Word Cloud">
             {% else %}
             <p>詞雲圖片載入失敗。</p>
             {% endif %}
