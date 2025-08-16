@@ -8,8 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reddit 貼文列表與洞察</title>
     <link rel="stylesheet" href="{% static 'core/css/styles.css' %}">
-    <link rel="icon" href="{% static 'core/images/favicon.ico' %}" type="image/x-icon"> 
-    <link rel="shortcut icon" href="{% static 'core/images/favicon.ico' %}" type="image/x-icon"> 
+    <link rel="icon" href="{% static 'core/images/favicon.ico' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'core/images/favicon.ico' %}" type="image/x-icon">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,7 +34,7 @@
             margin-bottom: 30px;
         }
 
-        /* 新增的導航/連結區塊 */
+        /* 導航/連結區塊 */
         .nav-section {
             text-align: center;
             margin-bottom: 30px;
@@ -42,20 +42,6 @@
             background-color: #e9ecef;
             border-radius: 8px;
         }
-
-        /* .nav-section .analysis-link {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-
-        .nav-section .analysis-link:hover {
-            background-color: #0056b3;
-        } */
 
         /* 貼文列表樣式 */
         .post {
@@ -117,6 +103,78 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
+        /* 分頁導航樣式 (新版) */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            /* 允許換行 */
+        }
+
+        .pagination .page-item {
+            margin: 0 5px;
+        }
+
+        .pagination .page-link {
+            display: block;
+            padding: 8px 15px;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+            color: #007bff;
+            text-decoration: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .pagination .page-link:hover:not(.disabled) {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            pointer-events: none;
+            cursor: default;
+            background-color: #e9ecef;
+            border-color: #dee2e6;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        /* 頁碼輸入框和按鈕樣式 */
+        .jump-to-page {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .jump-to-page input[type="number"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 80px;
+            text-align: center;
+        }
+
+        .jump-to-page button {
+            padding: 8px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .jump-to-page button:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 
@@ -138,8 +196,60 @@
         </div>
 
         <h2>Reddit 貼文列表</h2>
-        {% if posts %}
-        {% for post in posts %}
+        {# 檢查 page_obj 是否有內容 #}
+        {% if page_obj %}
+        {# 分頁導航區塊 (上方) - 使用您提供的結構 #}
+        <nav style="margin-bottom: 30px;">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">« 第一頁</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">上一頁</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">« 第一頁</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">上一頁</span>
+                </li>
+                {% endif %}
+
+                <li class="page-item active">
+                    <span class="page-link">第 {{ page_obj.number }} 頁，共 {{ page_obj.paginator.num_pages }} 頁</span>
+                </li>
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">下一頁</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">最後一頁 »</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">下一頁</span>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">最後一頁 »</span>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        {# 跳轉頁碼區塊 (上方) - 放在分頁導航下方 #}
+        <div class="jump-to-page" style="margin-bottom: 30px;">
+            <form action="" method="get">
+                跳轉到第 <input type="number" name="page" min="1" max="{{ page_obj.paginator.num_pages }}"
+                    value="{{ page_obj.number }}"> 頁
+                <button type="submit">前往</button>
+            </form>
+        </div>
+
+        {# 實際貼文列表 #}
+        {% for post in page_obj %}
         <div class="post">
             <h2 class="post-title">{{ post.title }}</h2>
             <div class="post-info">
@@ -154,6 +264,7 @@
             <p><a href="{{ post.url }}" target="_blank" class="post-link">原始貼文連結</a></p>
         </div>
         {% endfor %}
+
         {% else %}
         <p class="no-posts">目前沒有 Reddit 貼文。</p>
         {% endif %}

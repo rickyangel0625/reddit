@@ -1,8 +1,10 @@
 # Reddit 詐騙貼文平台
 這是一個基於 Django 的 Web 應用程式，旨在透過 Reddit API 獲取相關貼文，並對詐騙議題進行深度分析，提供關鍵數據洞察。
+
+[佈署網站](https://reddit-cwzn.onrender.com)
+
 ![首頁截圖](screenshots/homepage.png)
 ![LDA 可視化截圖](screenshots/lda_visualization.png)
-
 
 ## 功能概覽 (Features)
 
